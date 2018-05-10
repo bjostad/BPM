@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://git-codecommit.us-west-2.amazonaws.com/v1/repos/BPM"
+    "url": "https://github.com/bjostad/BPM"
   },
   "author": "Nick Pool and BJ Bjostad",
   "license": "ISC",

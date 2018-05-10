@@ -1,11 +1,12 @@
 var express    = require('express'),
     app        = express(),
-    bodyParser = require('body-parser'),
+	bodyParser = require('body-parser'),
+	path = require('path'),
     spotAPI	   = require('spotify-web-api-node'),
     request    = require('request');
 
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.set("view engine", "ejs");
 
 
@@ -38,11 +39,8 @@ app.get('/login', function(req, res) {
 
 //AuthN return from Spotify
 app.get("/callback", function( req, res){
-
 	var code = req.query.code || null;
 	var state = req.query.state || null;
-
-
 	//Prepare to redeem code for token
     var authOptions = {
       	url: 'https://accounts.spotify.com/api/token',
@@ -58,13 +56,13 @@ app.get("/callback", function( req, res){
     };
 
 
-
     //Redeem Code for Token AuthZ-ish
 	request.post(authOptions, function(error, response, body) {
 
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
-
+		
+		console.log("redeemed code for token: ");
       	console.log(access_token);
 
       	res.redirect("./playlistCreator"+
