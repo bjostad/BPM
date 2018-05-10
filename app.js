@@ -5,6 +5,7 @@ var express    = require('express'),
     request    = require('request');
 
 app.use(bodyParser.urlencoded({extended: false}));
+app.use( express.static(path.join(__dirname, 'public')))
 app.set("view engine", "ejs");
 
 
@@ -80,7 +81,7 @@ app.get("/playlistCreator", function (req, res){
 
 
 //START EXPRESS SERVER
-//Server must run on port 3000 to allow 
+//Server must run on port 3000 to for redirect UI (localhost:3000/callback)
 app.listen(3000, function(){
     console.log("BPM Server Started.");
 });
