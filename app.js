@@ -5,7 +5,7 @@ var express    = require('express'),
     request    = require('request');
 
 app.use(bodyParser.urlencoded({extended: false}));
-app.use( express.static(path.join(__dirname, 'public')))
+app.use(express.static('public'));
 app.set("view engine", "ejs");
 
 
