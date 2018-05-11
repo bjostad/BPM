@@ -65,16 +65,17 @@ app.get("/callback", function( req, res){
 		console.log("redeemed code for token: ");
       	console.log(access_token);
 
-      	res.redirect("./playlistCreator"+
-			'?access_token=' + access_token
-		);
+		  res.redirect("./playlistCreator" + 
+						"?token="	+ 
+						access_token	
+					);
     });
 });
 
 
 app.get("/playlistCreator", function (req, res){
 
-	res.render("playlistCreator")
+	res.render("playlistCreator", {token: req.query})
 });
 
 

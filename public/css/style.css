@@ -35,5 +35,10 @@ html, body{
     color: #fff;
     padding: 0.5em;
   }
+
+
+  .jumbotron {
+    margin-top: 2em;
+  }
   
   
