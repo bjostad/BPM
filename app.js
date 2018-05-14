@@ -62,22 +62,54 @@ app.get("/callback", function( req, res){
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
 		
-		console.log("redeemed code for token: ");
-      	console.log(access_token);
+		console.log("redeemed code for token: "+ access_token);
 
 		  res.redirect("./playlistCreator" + 
 						"?token="	+ 
 						access_token	
 					);
-    });
+
+	//Set spotifyApi session tokens
+		spotifyApi.setCredentials({
+			accessToken: access_token,
+			refreshToken: refresh_token,
+		});
+		getSpotProperties();
+	});
+
+
 });
 
 
 app.get("/playlistCreator", function (req, res){
-
-	res.render("playlistCreator", {token: req.query})
+	var access_token = spotifyApi.getAccessToken();
+	res.render("playlistCreator", {token: access_token})
 });
 
+
+app.get("/Recommendations", function (req, res){
+	var recs = getRecommendations({ min_energy: 0.4, 
+		seed_artists: ['6mfK6Q2tzLMEchAr0e9Uzu', 
+			'4DYFVNKZ1uixa6SQTvzQwJ'], 
+			min_popularity: 50 })
+			
+	.then(function(data) {
+		// Output items
+		console.log("Now Playing: ",data.body);
+		}, function(err) {
+		console.log('Something went wrong!', err);
+	});
+
+});
+
+
+function getSpotProperties(){
+	console.log('The access token is ' + spotifyApi.getAccessToken());
+	console.log('The refresh token is ' + spotifyApi.getRefreshToken());
+	console.log('The redirectURI is ' + spotifyApi.getRedirectURI());
+	console.log('The client ID is ' + spotifyApi.getClientId());
+	console.log('The client secret is ' + spotifyApi.getClientSecret());
+}
 
 //START EXPRESS SERVER
 //Server must run on port 3000 to for redirect UI (localhost:3000/callback)
