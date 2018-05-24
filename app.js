@@ -2,7 +2,8 @@ var express    = require('express'),
     app        = express(),
 	bodyParser = require('body-parser'),
 	path = require('path'),
-    spotAPI	   = require('spotify-web-api-node'),
+	uniqid = require('uniqid'),
+	spotAPI	   = require('spotify-web-api-node'),
     request    = require('request');
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -59,21 +60,15 @@ app.get("/callback", function( req, res){
     //Redeem Code for Token AuthZ-ish
 	request.post(authOptions, function(error, response, body) {
 
-        var access_token = body.access_token,
-            refresh_token = body.refresh_token;
-		
-		console.log("redeemed code for token: "+ access_token);
-
-		  res.redirect("./playlistCreator" + 
-						"?token="	+ 
-						access_token	
-					);
-
 	//Set spotifyApi session tokens
 		spotifyApi.setCredentials({
-			accessToken: access_token,
-			refreshToken: refresh_token,
+			accessToken: body.access_token,
+			refreshToken: body.refresh_token,
 		});
+
+		console.log("Redeemed code for token: "+ body.access_token);
+		res.redirect("./playlistCreator");
+
 		getSpotProperties();
 	});
 
@@ -82,23 +77,13 @@ app.get("/callback", function( req, res){
 
 
 app.get("/playlistCreator", function (req, res){
-	var access_token = spotifyApi.getAccessToken();
-	res.render("playlistCreator", {token: access_token})
+	res.render("playlistCreator", {accessToken: spotifyApi.getAccessToken()});
 });
 
 
 app.get("/Recommendations", function (req, res){
-	var recs = getRecommendations({ min_energy: 0.4, 
-		seed_artists: ['6mfK6Q2tzLMEchAr0e9Uzu', 
-			'4DYFVNKZ1uixa6SQTvzQwJ'], 
-			min_popularity: 50 })
-			
-	.then(function(data) {
-		// Output items
-		console.log("Now Playing: ",data.body);
-		}, function(err) {
-		console.log('Something went wrong!', err);
-	});
+
+
 
 });
 
