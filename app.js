@@ -12,11 +12,9 @@ app.set("view engine", "ejs");
 
 
 //Spotify BPM App config
-var spotifyApi = new spotAPI({
-  	clientId: 'e3f3bf9192fe4f608f8774bbd45ea912',
-  	clientSecret: 'ba12b9cb4f7c4071b492a8ceffc8ac7b',
-  	redirectUri: 'http://localhost:3000/callback'
-});
+var clientId = 'e3f3bf9192fe4f608f8774bbd45ea912',
+	clientSecret = 'ba12b9cb4f7c4071b492a8ceffc8ac7b',
+	redirectUri = 'http://localhost:3000/callback';
 
 
 //ROUTES
@@ -27,6 +25,12 @@ app.get("/", function( req, res){
 
 //redirect user to spotify for AuthN
 app.get('/login', function(req, res) {
+	var spotifyApi = new spotAPI({
+		clientId: clientId,
+		clientSecret: clientSecret,
+		redirectUri: redirectUri
+  	});
+
 	var scopes = 'user-read-private user-read-email playlist-modify-public playlist-modify-private user-library-read user-top-read';
 	res.redirect('https://accounts.spotify.com/authorize' +
 	  	'?response_type=code' +
@@ -40,8 +44,14 @@ app.get('/login', function(req, res) {
 
 //AuthN return from Spotify
 app.get("/callback", function( req, res){
-	var code = req.query.code || null;
-	var state = req.query.state || null;
+	var spotifyApi = new spotAPI({
+		clientId: clientId,
+		clientSecret: clientSecret,
+		redirectUri: redirectUri
+  	});
+	var code = req.query.code || null,
+		state = req.query.state || null;
+
 	//Prepare to redeem code for token
     var authOptions = {
       	url: 'https://accounts.spotify.com/api/token',
@@ -60,16 +70,9 @@ app.get("/callback", function( req, res){
     //Redeem Code for Token AuthZ-ish
 	request.post(authOptions, function(error, response, body) {
 
-	//Set spotifyApi session tokens
-		spotifyApi.setCredentials({
-			accessToken: body.access_token,
-			refreshToken: body.refresh_token,
-		});
-
 		console.log("Redeemed code for token: "+ body.access_token);
-		res.redirect("./playlistCreator?token="+body.access_token);
+		res.redirect("./playlistCreator?accessToken="+body.access_token);
 
-		getSpotProperties();
 	});
 
 
@@ -77,11 +80,18 @@ app.get("/callback", function( req, res){
 
 //Render playlist creation page
 app.get("/playlistCreator", function (req, res){
-	res.render("playlistCreator", {accessToken: spotifyApi.getAccessToken()});
+	res.render("playlistCreator", {accessToken: req.query.accessToken});
 });
 
 
+//Get recommendations from the spotify API
 app.get("/Recommendations", function (req, res){
+	var spotifyApi = new spotAPI({
+		clientId: clientId,
+		clientSecret: clientSecret,
+		redirectUri: redirectUri,
+		accessToken: req.query.accessToken
+  	});
 
 	var searchOptions = {
 		target_tempo: req.query.bpmRequested,

@@ -8,11 +8,12 @@ $(document).ready(function() {
 
 
 //collect input from text fields and retrieve recommendations from SpotifyAPI
-//With jQuery $("#genre").val(); is the same as document.getElementById("genre").value;
+//With jQuery, $("#genre").val(); is the same as document.getElementById("genre").value;
 function getRecommendations(){
 
-    var bpmRequested = $("#bpmRequested").val();
-    var genre = $("#genre").val();
+    var accessToken = $("#dontdothis").text(),
+        bpmRequested = $("#bpmRequested").val(),
+        genre = $("#genre").val();
 
     console.log(bpmRequested);
     console.log(genre);
@@ -21,6 +22,7 @@ function getRecommendations(){
         type: "GET",
         url: "Recommendations",
         data: {
+          accessToken: accessToken,
           genre: genre,
           bpmRequested: bpmRequested
         },
