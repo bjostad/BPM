@@ -1,8 +1,22 @@
 <% include partials/header %>
-<script src="js/playlist.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
 <h1>Spotify Auth Complete</h1>
 <p>time for playlist creation</p>
 <p>token: <%= accessToken %> </p>
 
+
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="inputGroup-sizing-default">Beats Per Minute</span>
+    </div>
+    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="bpmRequested">
+    <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-default">Genre</span>
+      </div>
+    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="genre">
+<button type="button" class="btn btn-success" id="btnSearch">Search</button>
+<p id="results"></p>
+
+<script src="js/playlist.js"></script>
 <% include partials/footer %>

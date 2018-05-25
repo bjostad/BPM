@@ -67,7 +67,7 @@ app.get("/callback", function( req, res){
 		});
 
 		console.log("Redeemed code for token: "+ body.access_token);
-		res.redirect("./playlistCreator");
+		res.redirect("./playlistCreator?token="+body.access_token);
 
 		getSpotProperties();
 	});
@@ -75,7 +75,7 @@ app.get("/callback", function( req, res){
 
 });
 
-
+//Render playlist creation page
 app.get("/playlistCreator", function (req, res){
 	res.render("playlistCreator", {accessToken: spotifyApi.getAccessToken()});
 });
@@ -83,8 +83,20 @@ app.get("/playlistCreator", function (req, res){
 
 app.get("/Recommendations", function (req, res){
 
+	var searchOptions = {
+		target_tempo: req.query.bpmRequested,
+		seed_genres: req.query.genre
+	};
 
-
+	spotifyApi.getRecommendations(searchOptions)
+		.then(function(results) {
+			res.json(results);
+			console.log(results);
+		});
+	
+	
+	
+	
 });
 
 
