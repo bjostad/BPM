@@ -3,8 +3,44 @@ console.log("Connected and working");
 
 //Setup event listener for Seach button
 $(document).ready(function() {
+    var genres = getGenres();
+
     $("#btnSearch").click(getRecommendations); 
 });
+
+/**
+ * Get avialble genres from spotify
+ */
+function getGenres(){
+    var accessToken = $("#dontdothis").text();
+
+    $.ajax({
+        type: "GET",
+        url: "genres",
+        data: {
+          accessToken: accessToken
+        },
+        success: function(result) {
+            populateGenreSelection(result.body.genres);
+        },
+        failure: function(){
+            alert("Unable to retrieve tracks. Please refresh page and try again!");
+        }
+    });
+
+}
+
+/**
+ * Add Genres to select list
+ */
+function populateGenreSelection(genres){
+    console.log(genres);
+    var selectGenres = document.getElementById("genres");
+    for(index in genres) {
+        selectGenres.options[selectGenres.options.length] = new Option(genres[index], genres[index]);
+    }
+}
+
 
 
 //collect input from text fields and retrieve recommendations from SpotifyAPI
@@ -13,26 +49,40 @@ function getRecommendations(){
 
     var accessToken = $("#dontdothis").text(),
         bpmRequested = $("#bpmRequested").val(),
-        genre = $("#genre").val();
+        genre = $("#genres").val();
 
     console.log(bpmRequested);
     console.log(genre);
 
     $.ajax({
         type: "GET",
-        url: "Recommendations",
+        url: "recommendations",
         data: {
           accessToken: accessToken,
           genre: genre,
           bpmRequested: bpmRequested
         },
         success: function(result) {
-            console.log(result.body.tracks[0].artists[0].name)
-          $("#results").html("<strong>Track 1 Artist: </strong>" + result.body.tracks[0].artists[0].name + "<strong>Track 1 Album: </strong>" + result.body.tracks[0].album.name);
+            populateResults(result.body.tracks);
         },
         failure: function(){
             alert("Unable to retrieve tracks. Please refresh page and try again!");
         }
     });
+};
+
+
+function populateResults(tracks){
+    console.log(tracks);
+    
+    $(resultList).empty();
+
+    for(index in tracks) {
+        var ul = document.getElementById("resultList");
+        var li = document.createElement("li");
+        li.className = "list-group-item";
+        li.appendChild(document.createTextNode(tracks[index].artists[0].name + " - "+ tracks[index].name + ""));
+        ul.appendChild(li);
+    }
 
 };

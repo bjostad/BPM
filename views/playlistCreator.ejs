@@ -7,18 +7,25 @@
 <p id="dontdothis"><%= accessToken %></p>
 
 
-
-<div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text" id="inputGroup-sizing-default">Beats Per Minute</span>
+<form>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-default">Beats Per Minute</span>
+        </div>
+        <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="bpmRequested">
     </div>
-    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="bpmRequested">
-    <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-default">Genre</span>
+    <div class="form-group">
+        <label for="genres">Select Genre: </label>
+        <select class="form-control" id="genres">
+        </select>
       </div>
-    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="genre">
+</form>
+
 <button type="button" class="btn btn-success" id="btnSearch">Search</button>
-<p id="results"></p>
+
+
+<ul class="list-group" id="resultList">
+</ul>
 
 <script src="js/playlist.js"></script>
 <% include partials/footer %>

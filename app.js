@@ -42,7 +42,11 @@ app.get('/login', function(req, res) {
 });
 
 
-//AuthN return from Spotify
+
+/**
+ * AuthN return from Spotify
+ * 
+ */
 app.get("/callback", function( req, res){
 	var spotifyApi = new spotAPI({
 		clientId: clientId,
@@ -70,6 +74,7 @@ app.get("/callback", function( req, res){
     //Redeem Code for Token AuthZ-ish
 	request.post(authOptions, function(error, response, body) {
 
+		//Redirect to /playlistCreator with the access Token
 		console.log("Redeemed code for token: "+ body.access_token);
 		res.redirect("./playlistCreator?accessToken="+body.access_token);
 
@@ -85,7 +90,7 @@ app.get("/playlistCreator", function (req, res){
 
 
 //Get recommendations from the spotify API
-app.get("/Recommendations", function (req, res){
+app.get("/recommendations", function (req, res){
 	var spotifyApi = new spotAPI({
 		clientId: clientId,
 		clientSecret: clientSecret,
@@ -102,14 +107,31 @@ app.get("/Recommendations", function (req, res){
 		.then(function(results) {
 			res.json(results);
 			console.log(results);
-		});
-	
-	
-	
-	
+		});	
+});
+
+/**
+ * Get genres using spotAPI
+ */
+app.get("/genres", function (req, res){
+	var spotifyApi = new spotAPI({
+		clientId: clientId,
+		clientSecret: clientSecret,
+		redirectUri: redirectUri,
+		accessToken: req.query.accessToken
+  	});
+
+	spotifyApi.getAvailableGenreSeeds()
+		.then(function(results) {
+			res.json(results);
+			console.log(results);
+		});	
 });
 
 
+/**
+ * Test function to make sure all spotify API requirements are avaialble.
+ */
 function getSpotProperties(){
 	console.log('The access token is ' + spotifyApi.getAccessToken());
 	console.log('The refresh token is ' + spotifyApi.getRefreshToken());
