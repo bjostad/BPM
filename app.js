@@ -139,9 +139,10 @@ function getSpotProperties(){
 	console.log('The client ID is ' + spotifyApi.getClientId());
 	console.log('The client secret is ' + spotifyApi.getClientSecret());
 }
-
-//START EXPRESS SERVER
-//Server must run on port 3000 to for redirect UI (localhost:3000/callback)
+/**
+ * START EXPRESS SERVER
+ * Server must run on port 3000 to for redirect UI (localhost:3000/callback)
+ */
 app.listen(3000, function(){
     console.log("BPM Server Started.");
 });
