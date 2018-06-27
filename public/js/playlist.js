@@ -82,12 +82,12 @@ function getRecommendations(){
 function populateResults(tracks){
     console.log(tracks);
     
-    $(resultList).empty();
+    $("#resultParent").empty();
 
     for(index in tracks) {
         var resultParent = document.getElementById("resultParent");
         var resultChild = document.createElement("div");
-        resultChild.className = "resultChild";
+        resultChild.className = "card";
         resultChild.appendChild(document.createTextNode(tracks[index].artists[0].name + " - "+ tracks[index].name + ""));
         resultParent.appendChild(resultChild);
     }
