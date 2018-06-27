@@ -1,7 +1,8 @@
 console.log("Connected and working");
 
-
-//Setup event listener for Seach button
+/**
+ * Setup event listener for Seach button
+ */
 $(document).ready(function() {
     var genres = getGenres();
 
@@ -24,14 +25,15 @@ function getGenres(){
             populateGenreSelection(result.body.genres);
         },
         failure: function(){
-            alert("Unable to retrieve tracks. Please refresh page and try again!");
+            alert("Unable to retrieve genres. Please refresh page and try again!"); // TODO: refresh access token as this is most likely the cause of error.
         }
     });
 
 }
 
 /**
- * Add Genres to select list
+ * Add genres to genre selection dropdown
+ * @param {*} genres 
  */
 function populateGenreSelection(genres){
     console.log(genres);
@@ -42,9 +44,10 @@ function populateGenreSelection(genres){
 }
 
 
-
-//collect input from text fields and retrieve recommendations from SpotifyAPI
-//With jQuery, $("#genre").val(); is the same as document.getElementById("genre").value;
+/**
+ * Collect input from text fields and retrieve recommendations from SpotifyAPI
+ * with jQuery, $("#genre").val(); is the same as document.getElementById("genre").value;
+ */
 function getRecommendations(){
 
     var accessToken = $("#dontdothis").text(),
@@ -66,23 +69,26 @@ function getRecommendations(){
             populateResults(result.body.tracks);
         },
         failure: function(){
-            alert("Unable to retrieve tracks. Please refresh page and try again!");
+            alert("Unable to retrieve tracks. Please refresh page and try again!"); // TODO: refresh access token as this is most likely the cause of error.
         }
     });
 };
 
-
+/**
+ * Create unordered list of results 
+ * TODO: Rework this into tile layout for each track.
+ * @param {*} tracks 
+ */
 function populateResults(tracks){
     console.log(tracks);
     
     $(resultList).empty();
 
     for(index in tracks) {
-        var ul = document.getElementById("resultList");
-        var li = document.createElement("li");
-        li.className = "list-group-item";
-        li.appendChild(document.createTextNode(tracks[index].artists[0].name + " - "+ tracks[index].name + ""));
-        ul.appendChild(li);
+        var resultParent = document.getElementById("resultParent");
+        var resultChild = document.createElement("div");
+        resultChild.className = "resultChild";
+        resultChild.appendChild(document.createTextNode(tracks[index].artists[0].name + " - "+ tracks[index].name + ""));
+        resultParent.appendChild(resultChild);
     }
-
 };
