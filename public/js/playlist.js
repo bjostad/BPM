@@ -7,6 +7,9 @@ $(document).ready(function() {
     var genres = getGenres();
 
     $("#btnSearch").click(getRecommendations); 
+
+
+
 });
 
 /**
@@ -103,4 +106,9 @@ function populateResults(tracks){
         resultParent.appendChild(resultChild);
 
     }
+
+    $(".card").on('click', function () {
+        console.log("card clicked!");
+        $(this).toggleClass('selectedTrack');
+    });
 };
