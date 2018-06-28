@@ -44,7 +44,7 @@ div, body{
 .card-deck .card {
   background-color: #fff;
   min-width: 300px;
-  min-height: 600px;
+  min-height: 300px;
   margin: 1em;
   padding: 1em;
   float: left;
