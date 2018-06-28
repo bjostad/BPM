@@ -89,6 +89,8 @@ function populateResults(tracks){
         var resultChild = document.createElement("div");
         resultChild.className = "card";
         resultChild.appendChild(document.createTextNode(tracks[index].artists[0].name + " - "+ tracks[index].name + ""));
+        resultChild.appendChild(document.createTextNode(tracks[index].artists[0].name + " - "+ tracks[index].name + ""));
         resultParent.appendChild(resultChild);
+
     }
 };
