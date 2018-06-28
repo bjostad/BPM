@@ -87,9 +87,19 @@ function populateResults(tracks){
     for(index in tracks) {
         var resultParent = document.getElementById("resultParent");
         var resultChild = document.createElement("div");
+        var img = document.createElement("img");
+        var second = document.createElement("div");
+        var text = document.createElement("p");
+        
         resultChild.className = "card";
-        resultChild.appendChild(document.createTextNode(tracks[index].artists[0].name + " - "+ tracks[index].name + ""));
-        resultChild.appendChild(document.createTextNode(tracks[index].artists[0].name + " - "+ tracks[index].name + ""));
+        img.src = tracks[index].album.images["1"].url
+        img.className = "card-img-top";
+        second.className = "card-body";
+        text.className = "card-text";
+        resultChild.appendChild(img);
+        resultChild.appendChild(second);
+        second.appendChild(text);
+        text.appendChild(document.createTextNode(tracks[index].artists[0].name + " - "+ tracks[index].name + ""));
         resultParent.appendChild(resultChild);
 
     }
