@@ -78,11 +78,14 @@ function populateResults(tracks){
     $(resultList).empty();
 
     for(index in tracks) {
-        var ul = document.getElementById("resultList");
-        var li = document.createElement("li");
-        li.className = "list-group-item";
-        li.appendChild(document.createTextNode(tracks[index].artists[0].name + " - "+ tracks[index].name + ""));
-        ul.appendChild(li);
-    }
+        var div = document.getElementById("resultList");
+        var li = document.createElement("div");
+        var img = document.createElement("img");
+        img.src = tracks[index].album.images["2"].url
 
+        li.className = "card";
+        li.appendChild(document.createTextNode(tracks[index].artists[0].name + " - "+ tracks[index].name + ""));
+        li.appendChild(img);
+        div.appendChild(li);
+    }
 };

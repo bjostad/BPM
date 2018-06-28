@@ -40,3 +40,6 @@ div, body{
 .jumbotron {
   margin-top: 2em;
 }
+.card-deck{
+  display: inline-block;
+}
