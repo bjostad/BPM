@@ -5,7 +5,7 @@ console.log("Connected and working");
  */
 $(document).ready(function() {
     var genres = getGenres();
-
+    var userInfo = getUserInfo();
     $("#btnSearch").click(getRecommendations); 
 
 
@@ -32,7 +32,26 @@ function getGenres(){
         }
     });
 
-}
+};
+
+
+function getUserInfo(){
+    var accessToken = $("#dontdothis").text();
+
+    $.ajax({
+        type: "GET",
+        url: "userInfo",
+        data: {
+          accessToken: accessToken
+        },
+        success: function(result) {
+            $("#userName").text("Welcome, "+result.body.id);
+        },
+        failure: function(){
+            alert("Unable to retrieve user info. Please refresh page and try again!"); // TODO: refresh access token as this is most likely the cause of error.
+        }
+    });
+};
 
 /**
  * Add genres to genre selection dropdown
@@ -44,7 +63,7 @@ function populateGenreSelection(genres){
     for(index in genres) {
         selectGenres.options[selectGenres.options.length] = new Option(genres[index], genres[index]);
     }
-}
+};
 
 
 /**
