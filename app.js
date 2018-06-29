@@ -4,12 +4,13 @@ var express    = require('express'),
 	path = require('path'),
 	uniqid = require('uniqid'),
 	spotAPI	   = require('spotify-web-api-node'),
-    request    = require('request');
+	request    = require('request'),
+	cookieParser = require('cookie-parser');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
 app.set("view engine", "ejs");
-
 
 //Spotify BPM App config
 var clientId = 'e3f3bf9192fe4f608f8774bbd45ea912',
@@ -74,9 +75,14 @@ app.get("/callback", function( req, res){
     //Redeem Code for Token AuthZ-ish
 	request.post(authOptions, function(error, response, body) {
 
-		//Redirect to /playlistCreator with the access Token
 		console.log("Redeemed code for token: "+ body.access_token);
-		res.redirect("./playlistCreator?accessToken="+body.access_token);
+
+		//Set cookie with access token
+		res.cookie('access_token', body.access_token);
+		console.log("Set access-token on cookie");
+
+		//Redirect to /playlistCreator
+		res.redirect("./playlistCreator");
 
 	});
 
@@ -95,7 +101,7 @@ app.get("/recommendations", function (req, res){
 		clientId: clientId,
 		clientSecret: clientSecret,
 		redirectUri: redirectUri,
-		accessToken: req.query.accessToken
+		accessToken: req.cookies.access_token
   	});
 
 	var searchOptions = {
@@ -114,11 +120,12 @@ app.get("/recommendations", function (req, res){
  * Get genres using spotAPI
  */
 app.get("/genres", function (req, res){
+
 	var spotifyApi = new spotAPI({
 		clientId: clientId,
 		clientSecret: clientSecret,
 		redirectUri: redirectUri,
-		accessToken: req.query.accessToken
+		accessToken: req.cookies.access_token
   	});
 
 	spotifyApi.getAvailableGenreSeeds()
@@ -128,13 +135,15 @@ app.get("/genres", function (req, res){
 		});	
 });
 
-
+/**
+ * Get user info (User ID necessary for playlist creation)
+ */
 app.get("/userInfo", function (req, res){
 	var spotifyApi = new spotAPI({
 		clientId: clientId,
 		clientSecret: clientSecret,
 		redirectUri: redirectUri,
-		accessToken: req.query.accessToken
+		accessToken: req.cookies.access_token
   	});
 
 	spotifyApi.getMe()
@@ -149,7 +158,6 @@ app.post("/createPlaylist", function (req, res){
 });
 
 
-
 /**
  * Test function to make sure all spotify API requirements are avaialble.
  */
@@ -160,6 +168,8 @@ function getSpotProperties(){
 	console.log('The client ID is ' + spotifyApi.getClientId());
 	console.log('The client secret is ' + spotifyApi.getClientSecret());
 }
+
+
 /**
  * START EXPRESS SERVER
  * Server must run on port 3000 to for redirect UI (localhost:3000/callback)
