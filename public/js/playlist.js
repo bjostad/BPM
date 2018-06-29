@@ -15,13 +15,11 @@ $(document).ready(function() {
  * Get avialble genres from spotify
  */
 function getGenres(){
-    var accessToken = $("#dontdothis").text();
 
     $.ajax({
         type: "GET",
         url: "genres",
         data: {
-          accessToken: accessToken
         },
         success: function(result) {
             populateGenreSelection(result.body.genres);
@@ -37,13 +35,11 @@ function getGenres(){
  * Get username and display welcome message
  */
 function getUserInfo(){
-    var accessToken = $("#dontdothis").text();
-
+    
     $.ajax({
         type: "GET",
         url: "userInfo",
         data: {
-          accessToken: accessToken
         },
         success: function(result) {
             $("#userName").text("Welcome, "+result.body.id);
@@ -73,8 +69,7 @@ function populateGenreSelection(genres){
  */
 function getRecommendations(){
 
-    var accessToken = $("#dontdothis").text(),
-        bpmRequested = $("#bpmRequested").val(),
+    var bpmRequested = $("#bpmRequested").val(),
         genre = $("#genres").val();
 
     console.log(bpmRequested);
@@ -84,7 +79,6 @@ function getRecommendations(){
         type: "GET",
         url: "recommendations",
         data: {
-          accessToken: accessToken,
           genre: genre,
           bpmRequested: bpmRequested
         },
