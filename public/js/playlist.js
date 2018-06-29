@@ -140,6 +140,6 @@ function populateResults(tracks){
                 console.log("removing" + this.id)
             }
         }
-        console.log(playlist);
+        console.log("Current playlist: " + playlist);
     });
 };
