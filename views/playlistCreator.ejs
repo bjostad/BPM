@@ -3,9 +3,6 @@
 
 <h1>Spotify Auth Complete</h1>
 <p>time for playlist creation</p>
-<!--The line below is bad and was done for quick testing purposes only. it needs to be removed and the token needs to be handled much more securly-->
-<p id="dontdothis"><%= accessToken %></p>
-
 
 <form>
     <div class="input-group mb-3">
@@ -22,6 +19,7 @@
 </form>
 
 <button type="button" class="btn btn-success" id="btnSearch">Search</button>
+<button type="button" class="btn btn-danger" id="btnCreatePlaylist">Create Playlist</button>
 
 <div class="card-deck" id="resultParent">
 </div>
