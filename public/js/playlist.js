@@ -120,6 +120,6 @@ function populateResults(tracks){
                 console.log("removing" + this)
             }
         }
-        console.log(playlist);
+        console.log("Current playlist: " + playlist);
     });
 };
