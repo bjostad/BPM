@@ -17,14 +17,21 @@ var clientId = 'e3f3bf9192fe4f608f8774bbd45ea912',
 	clientSecret = 'ba12b9cb4f7c4071b492a8ceffc8ac7b',
 	redirectUri = 'http://localhost:3000/callback';
 
+/**
+ * ROUTES
+ */
 
-//ROUTES
-//Landing page for app
+ 
+ /** 
+ * Landing page for app
+ */
 app.get("/", function( req, res){
    res.render("landing"); 
 });
 
-//redirect user to spotify for AuthN
+/**
+ * Redirect user to spotify for AuthN
+ */
 app.get('/login', function(req, res) {
 	var spotifyApi = new spotAPI({
 		clientId: clientId,
@@ -46,7 +53,6 @@ app.get('/login', function(req, res) {
 
 /**
  * AuthN return from Spotify
- * 
  */
 app.get("/callback", function( req, res){
 	var spotifyApi = new spotAPI({
@@ -84,6 +90,8 @@ app.get("/callback", function( req, res){
 		//Redirect to /playlistCreator
 		res.redirect("./playlistCreator");
 
+		//TODO: add error handling
+
 	});
 
 
@@ -91,7 +99,7 @@ app.get("/callback", function( req, res){
 
 //Render playlist creation page
 app.get("/playlistCreator", function (req, res){
-	res.render("playlistCreator", {accessToken: req.query.accessToken});
+	res.render("playlistCreator");
 });
 
 
