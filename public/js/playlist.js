@@ -95,7 +95,8 @@ function populateResults(tracks){
         var text = document.createElement("p");
         
         resultChild.className = "card";
-        img.src = tracks[index].album.images["1"].url
+        resultChild.id = tracks[index].uri;
+        img.src = tracks[index].album.images["1"].url;
         img.className = "card-img-top";
         second.className = "card-body";
         text.className = "card-text";
@@ -111,13 +112,13 @@ function populateResults(tracks){
         console.log("card clicked!");
         $(this).toggleClass('selectedTrack');
         if(this.className != "card"){
-            playlist.push(this);
-            console.log("adding" + this)
+            playlist.push(this.id);
+            console.log("adding" + this.id)
         }else{
-            var index = playlist.indexOf(this);
+            var index = playlist.indexOf(this.id);
             if(index > -1){
                 playlist.splice(index,1);
-                console.log("removing" + this)
+                console.log("removing" + this.id)
             }
         }
         console.log(playlist);
