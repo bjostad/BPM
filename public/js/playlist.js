@@ -6,9 +6,8 @@ console.log("Connected and working");
 $(document).ready(function() {
     var genres = getGenres();
     var userInfo = getUserInfo();
-    $("#btnSearch").click(getRecommendations); 
-
-
+    $("#btnSearch").click(getRecommendations);
+    
 
 });
 
@@ -34,7 +33,9 @@ function getGenres(){
 
 };
 
-
+/**
+ * Get username and display welcome message
+ */
 function getUserInfo(){
     var accessToken = $("#dontdothis").text();
 
@@ -126,20 +127,37 @@ function populateResults(tracks){
         resultParent.appendChild(resultChild);
 
     }
+
+    //create playlist array from selected cards
     var playlist = [];
     $(".card").on('click', function () {
         console.log("card clicked!");
         $(this).toggleClass('selectedTrack');
         if(this.className != "card"){
             playlist.push(this.id);
-            console.log("adding" + this.id)
+            console.log("adding " + this.id)
         }else{
             var index = playlist.indexOf(this.id);
             if(index > -1){
                 playlist.splice(index,1);
-                console.log("removing" + this.id)
+                console.log("removing " + this.id)
             }
         }
         console.log(playlist);
     });
+
+    //Event listener for playlist button
+    $("#btnCreatePlaylist").click(function(){
+        createPlaylist(playlist);
+    });
 };
+
+/**
+ * Create Playlist of selected tracks
+ * @param {} tracks 
+ */
+function createPlaylist(tracks){
+    for(index in tracks) {
+        console.log(tracks[index]);
+    }
+}

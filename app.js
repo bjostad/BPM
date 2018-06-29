@@ -128,7 +128,9 @@ app.get("/genres", function (req, res){
 		});	
 });
 
-
+/**
+ * Get user info (User ID necessary for playlist creation)
+ */
 app.get("/userInfo", function (req, res){
 	var spotifyApi = new spotAPI({
 		clientId: clientId,
@@ -149,7 +151,6 @@ app.post("/createPlaylist", function (req, res){
 });
 
 
-
 /**
  * Test function to make sure all spotify API requirements are avaialble.
  */
@@ -160,6 +161,8 @@ function getSpotProperties(){
 	console.log('The client ID is ' + spotifyApi.getClientId());
 	console.log('The client secret is ' + spotifyApi.getClientSecret());
 }
+
+
 /**
  * START EXPRESS SERVER
  * Server must run on port 3000 to for redirect UI (localhost:3000/callback)
