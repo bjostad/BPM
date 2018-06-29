@@ -129,6 +129,27 @@ app.get("/genres", function (req, res){
 });
 
 
+app.get("/userInfo", function (req, res){
+	var spotifyApi = new spotAPI({
+		clientId: clientId,
+		clientSecret: clientSecret,
+		redirectUri: redirectUri,
+		accessToken: req.query.accessToken
+  	});
+
+	spotifyApi.getMe()
+		.then(function(results) {
+			res.json(results);
+			console.log(results);
+		});	
+});
+
+app.post("/createPlaylist", function (req, res){
+	
+});
+
+
+
 /**
  * Test function to make sure all spotify API requirements are avaialble.
  */
