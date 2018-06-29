@@ -106,9 +106,20 @@ function populateResults(tracks){
         resultParent.appendChild(resultChild);
 
     }
-
+    var playlist = [];
     $(".card").on('click', function () {
         console.log("card clicked!");
         $(this).toggleClass('selectedTrack');
+        if(this.className != "card"){
+            playlist.push(this);
+            console.log("adding" + this)
+        }else{
+            var index = playlist.indexOf(this);
+            if(index > -1){
+                playlist.splice(index,1);
+                console.log("removing" + this)
+            }
+        }
+        console.log(playlist);
     });
 };
