@@ -17,11 +17,9 @@ var clientId = 'e3f3bf9192fe4f608f8774bbd45ea912',
 	clientSecret = 'ba12b9cb4f7c4071b492a8ceffc8ac7b',
 	redirectUri = 'http://localhost:3000/callback';
 
-/**
- * ROUTES
- */
 
- 
+//ROUTES
+
  /** 
  * Landing page for app
  */
@@ -77,10 +75,8 @@ app.get("/callback", function( req, res){
       	json: true
     };
 
-
     //Redeem Code for Token AuthZ-ish
 	request.post(authOptions, function(error, response, body) {
-
 		console.log("Redeemed code for token: "+ body.access_token);
 
 		//Set cookie with access token
@@ -97,13 +93,16 @@ app.get("/callback", function( req, res){
 
 });
 
-//Render playlist creation page
+/**
+ * Render playlist creation page
+ */
 app.get("/playlistCreator", function (req, res){
 	res.render("playlistCreator");
 });
 
-
-//Get recommendations from the spotify API
+/**
+ * Get recommendations from the spotify API
+ */
 app.get("/recommendations", function (req, res){
 	var spotifyApi = new spotAPI({
 		clientId: clientId,
@@ -120,7 +119,7 @@ app.get("/recommendations", function (req, res){
 	spotifyApi.getRecommendations(searchOptions)
 		.then(function(results) {
 			res.json(results);
-			console.log(results);
+			console.log("Recommendations collected and returned");
 		});	
 });
 
@@ -139,7 +138,7 @@ app.get("/genres", function (req, res){
 	spotifyApi.getAvailableGenreSeeds()
 		.then(function(results) {
 			res.json(results);
-			console.log(results);
+			console.log("Genres collected");
 		});	
 });
 
@@ -156,13 +155,46 @@ app.get("/userInfo", function (req, res){
 
 	spotifyApi.getMe()
 		.then(function(results) {
+			res.cookie('userID', results.body.id);
 			res.json(results);
-			console.log(results);
+			console.log("User info collected for "+results.body.id);
 		});	
 });
 
+/**
+ * Post created playlist to spotify
+ */
 app.post("/createPlaylist", function (req, res){
-	
+	var spotifyApi = new spotAPI({
+		clientId: clientId,
+		clientSecret: clientSecret,
+		redirectUri: redirectUri,
+		accessToken: req.cookies.access_token
+	  });
+
+	var userID = req.cookies.userID;
+	var tracks = req.body.selectedTracks;
+
+	  
+	// Create playlist
+	spotifyApi.createPlaylist(
+		userID, 
+		req.body.playlistName, 
+		{ public : false }
+	)
+	.then(function(results) {
+		console.log('Playlist created!');
+		console.log('user: '+ userID)
+		console.log('Playlist ID: '+results.body.id) 
+		console.log('Tracks: '+req.body.selectedTracks)
+		
+		// Add tracks to the playlist
+		spotifyApi.addTracksToPlaylist(
+			userID, 
+			results.body.id, 
+			req.body.selectedTracks
+		);
+	  })
 });
 
 
