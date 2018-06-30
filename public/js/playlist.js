@@ -92,6 +92,28 @@ function getRecommendations(){
 };
 
 /**
+ * Post tracks array and playlist name to playlist creation endpoint
+ * @param {spotify URI} tracks 
+ */
+function postSelectedTracks(tracks){
+    console.log("tracks passed to client side function:");
+    console.log(tracks);
+    $.ajax({
+        type: "POST",
+        url: "createPlaylist",
+        data: { 
+            selectedTracks: JSON.stringify(tracks),
+            playlistName: $("#playlistName").val()
+        },
+        success: function(result) {
+        },
+        failure: function(){
+            alert("Unable to post playlist. "); // TODO: Handle error properly
+        }
+    });
+};
+
+/**
  * Create unordered list of results 
  * TODO: Rework this into tile layout for each track.
  * @param {*} tracks 
@@ -142,16 +164,8 @@ function populateResults(tracks){
 
     //Event listener for playlist button
     $("#btnCreatePlaylist").click(function(){
-        createPlaylist(playlist);
+        postSelectedTracks(playlist);
     });
 };
 
-/**
- * Create Playlist of selected tracks
- * @param {} tracks 
- */
-function createPlaylist(tracks){
-    for(index in tracks) {
-        console.log(tracks[index]);
-    }
-}
+
