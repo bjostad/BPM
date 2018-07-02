@@ -1,14 +1,18 @@
 console.log("Connected and working");
+var playlist = [];
 
-/**
- * Setup event listener for Seach button
- */
+
 $(document).ready(function() {
-    var genres = getGenres();
-    var userInfo = getUserInfo();
+    getGenres();
+    getUserInfo();
+
+    //Setup event listener for Seach button
     $("#btnSearch").click(getRecommendations);
     
-
+    //Event listener for playlist button
+    $("#btnCreatePlaylist").click(function(){
+        postSelectedTracks(playlist);
+    });
 });
 
 /**
@@ -93,7 +97,7 @@ function getRecommendations(){
 
 /**
  * Post tracks array and playlist name to playlist creation endpoint
- * @param {spotify URI} tracks 
+ * @param {Object[]} tracks 
  */
 function postSelectedTracks(tracks){
     console.log("tracks passed to server side function:");
@@ -108,7 +112,7 @@ function postSelectedTracks(tracks){
         success: function(result) {
         },
         failure: function(){
-            alert("Unable to post playlist. "); // TODO: Handle error properly
+            alert("Unable to post playlist."); // TODO: Handle error properly
         }
     });
 };
@@ -116,7 +120,7 @@ function postSelectedTracks(tracks){
 /**
  * Create unordered list of results 
  * TODO: Rework this into tile layout for each track.
- * @param {*} tracks 
+ * @param {Object[]} tracks 
  */
 function populateResults(tracks){
     console.log(tracks);
@@ -145,7 +149,7 @@ function populateResults(tracks){
     }
 
     //create playlist array from selected cards
-    var playlist = [];
+    
     $(".card").on('click', function () {
         console.log("card clicked!");
         $(this).toggleClass('selectedTrack');
@@ -160,11 +164,6 @@ function populateResults(tracks){
             }
         }
         console.log(playlist);
-    });
-
-    //Event listener for playlist button
-    $("#btnCreatePlaylist").click(function(){
-        postSelectedTracks(playlist);
     });
 };
 
