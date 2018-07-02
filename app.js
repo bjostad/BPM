@@ -173,7 +173,7 @@ app.post("/createPlaylist", function (req, res){
 	  });
 
 	var userID = req.cookies.userID;
-	var tracks = req.body.selectedTracks;
+	var tracks = JSON.parse(req.body.selectedTracks);
 
 	  
 	// Create playlist
@@ -186,15 +186,21 @@ app.post("/createPlaylist", function (req, res){
 		console.log('Playlist created!');
 		console.log('user: '+ userID)
 		console.log('Playlist ID: '+results.body.id) 
-		console.log('Tracks: '+req.body.selectedTracks)
+		console.log('Tracks: '+tracks)
 		
 		// Add tracks to the playlist
 		spotifyApi.addTracksToPlaylist(
 			userID, 
 			results.body.id, 
-			req.body.selectedTracks
-		);
-	  })
+			tracks
+		)
+		.catch(function(results) {
+			console.log(results);
+	  	});
+	})
+	.catch(function(results) {
+		console.log(results);
+	});
 });
 
 
