@@ -5,7 +5,8 @@ var express    = require('express'),
 	uniqid = require('uniqid'),
 	spotAPI	   = require('spotify-web-api-node'),
 	request    = require('request'),
-	cookieParser = require('cookie-parser');
+	cookieParser = require('cookie-parser')
+	spotifyConfig = require('./spotifyConfig.js');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -13,11 +14,9 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 
 //Spotify BPM App config
-var clientId = 'e3f3bf9192fe4f608f8774bbd45ea912',
-	clientSecret = 'ba12b9cb4f7c4071b492a8ceffc8ac7b',
-	redirectUri = 'http://localhost:3000/callback';
-
-
+var clientId = spotifyConfig.CLIENT_ID,
+	clientSecret = spotifyConfig.CLIENT_SECRET,
+	redirectUri = spotifyConfig.REDIRECT_URI;
 //ROUTES
 
  /** 
@@ -195,11 +194,11 @@ app.post("/createPlaylist", function (req, res){
 			tracks
 		)
 		.catch(function(results) {
-			console.log(results);
+			console.log(results); //TODO: actual error handling
 	  	});
 	})
 	.catch(function(results) {
-		console.log(results);
+		console.log(results); //TODO: actual error handling
 	});
 });
 
