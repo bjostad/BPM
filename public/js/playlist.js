@@ -96,7 +96,7 @@ function getRecommendations(){
  * @param {spotify URI} tracks 
  */
 function postSelectedTracks(tracks){
-    console.log("tracks passed to client side function:");
+    console.log("tracks passed to server side function:");
     console.log(tracks);
     $.ajax({
         type: "POST",
