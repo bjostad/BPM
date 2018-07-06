@@ -14,7 +14,7 @@ function convertMillisToTime(time){
     if(hours === "00"){
         return minutes + 'm' + delim + seconds + 's';
     }
-    else if (minutes === "00"){
+    if (hours === "00" && minutes === "00"){
         return seconds + 's';
     }
     else {
