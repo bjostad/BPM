@@ -74,6 +74,7 @@ function getUserInfo(){
     });
 };
 
+
 /**
  * Add genres to genre selection dropdown
  * @param {*} genres 
