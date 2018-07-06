@@ -58,3 +58,6 @@ div, body{
 .navbar {
   background-color: none;
 }
+.fixed-top {
+  padding: 50px;
+}
