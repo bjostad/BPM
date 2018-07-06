@@ -148,6 +148,7 @@ function populateResults(tracks){
     
     $("#resultParent").empty();
 
+    
     for(index in tracks) {
         var resultParent = document.getElementById("resultParent");
         var resultChild = document.createElement("div");
@@ -157,8 +158,8 @@ function populateResults(tracks){
         var br = document.createElement("br");
         
         resultChild.className = "card";
-        resultChild.id = tracks[index].uri;
-        resultChild.dataTrackTime = tracks[index].duration_ms;
+        resultChild.dataset.trackUri = tracks[index].uri;
+        resultChild.dataset.trackTime = tracks[index].duration_ms;
         img.src = tracks[index].album.images["1"].url;
         img.className = "card-img-top";
         second.className = "card-body";
@@ -171,45 +172,36 @@ function populateResults(tracks){
         var time = convertMillisToTime(tracks[index].duration_ms);
         console.log(time);
         text.appendChild(document.createTextNode("Track Length: " + time));
-        
         resultParent.appendChild(resultChild);
 
     }
 
     //create playlist array from selected cards
-    
     $(".card").on('click', function () {
         console.log("card clicked!");
         $(this).toggleClass('selectedTrack');
         if(this.className != "card"){
-            playlist.push(this.id);
-            console.log("adding " + this.id);
-            playlistDuration += this.dataTrackTime;
+            playlist.push(this.dataset.trackUri);
+            console.log("adding " + this.dataset.trackUri);
+            playlistDuration += this.dataset.trackTime;
             console.log(convertMillisToTime(playlistDuration));
         }else{
-            var index = playlist.indexOf(this.id);
+            var index = playlist.indexOf(this.dataset.trackUri);
             if(index > -1){
                 playlist.splice(index,1);
-                playlistDuration -= this.dataTrackTime;
-                console.log("removing " + this.id);
+                playlistDuration -= this.dataset.trackTime;
+                console.log("removing " + this.dataset.trackUri);
                 console.log(convertMillisToTime(playlistDuration));
             }
         }
         console.log("Current playlist: " + playlist);
-        // getPlaylistDuration()
         updatePlaylistDuration();
     });
 };
-//the below function inserts time into html without jquery but needs to uncommented on line 198 to work
-// function getPlaylistDuration(){
-//     document.getElementById("playlistDuration").innerHTML = convertMillisToTime(playlistDuration);
-//     console.log("here!!!!")
-// };
+
 
 function updatePlaylistDuration(){
     var total = convertMillisToTime(playlistDuration);
     $("#playlistDuration").text("  Total Playtime: "+total);
     console.log("Playlist Total updated to: "+total);
 };
-
-
