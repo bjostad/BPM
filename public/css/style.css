@@ -58,3 +58,16 @@ div, body{
 .navbar {
   background-color: none;
 }
+.fixed-top {
+  padding: 50px;
+}
+.playlistDuration {
+  background: #83be00;
+  color: black;
+  margin: auto;
+  width: 50%;
+  height:auto;
+  text-align: center;
+  border-radius: 12px;
+  
+}
