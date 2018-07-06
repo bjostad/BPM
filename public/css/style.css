@@ -54,3 +54,7 @@ div, body{
   background-color: #84bd00;
   color: #fff;
 }
+
+.navbar {
+  background-color: none;
+}

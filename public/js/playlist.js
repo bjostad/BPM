@@ -1,14 +1,18 @@
 console.log("Connected and working");
+var playlist = [];
 
-/**
- * Setup event listener for Seach button
- */
+
 $(document).ready(function() {
-    var genres = getGenres();
-    var userInfo = getUserInfo();
+    getGenres();
+    getUserInfo();
+
+    //Setup event listener for Seach button
     $("#btnSearch").click(getRecommendations);
     
-
+    //Event listener for playlist button
+    $("#btnCreatePlaylist").click(function(){
+        postSelectedTracks(playlist);
+    });
 });
 
 /**
@@ -92,9 +96,31 @@ function getRecommendations(){
 };
 
 /**
+ * Post tracks array and playlist name to playlist creation endpoint
+ * @param {Object[]} tracks 
+ */
+function postSelectedTracks(tracks){
+    console.log("tracks passed to server side function:");
+    console.log(tracks);
+    $.ajax({
+        type: "POST",
+        url: "createPlaylist",
+        data: { 
+            selectedTracks: JSON.stringify(tracks),
+            playlistName: $("#playlistName").val()
+        },
+        success: function(result) {
+        },
+        failure: function(){
+            alert("Unable to post playlist."); // TODO: Handle error properly
+        }
+    });
+};
+
+/**
  * Create unordered list of results 
  * TODO: Rework this into tile layout for each track.
- * @param {*} tracks 
+ * @param {Object[]} tracks 
  */
 function populateResults(tracks){
     console.log(tracks);
@@ -123,7 +149,7 @@ function populateResults(tracks){
     }
 
     //create playlist array from selected cards
-    var playlist = [];
+    
     $(".card").on('click', function () {
         console.log("card clicked!");
         $(this).toggleClass('selectedTrack');
@@ -139,19 +165,6 @@ function populateResults(tracks){
         }
         console.log("Current playlist: " + playlist);
     });
-
-    //Event listener for playlist button
-    $("#btnCreatePlaylist").click(function(){
-        createPlaylist(playlist);
-    });
 };
 
-/**
- * Create Playlist of selected tracks
- * @param {} tracks 
- */
-function createPlaylist(tracks){
-    for(index in tracks) {
-        console.log(tracks[index]);
-    }
-}
+

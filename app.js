@@ -5,7 +5,8 @@ var express    = require('express'),
 	uniqid = require('uniqid'),
 	spotAPI	   = require('spotify-web-api-node'),
 	request    = require('request'),
-	cookieParser = require('cookie-parser');
+	cookieParser = require('cookie-parser')
+	spotifyConfig = require('./spotifyConfig.js');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -13,18 +14,21 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 
 //Spotify BPM App config
-var clientId = 'e3f3bf9192fe4f608f8774bbd45ea912',
-	clientSecret = 'ba12b9cb4f7c4071b492a8ceffc8ac7b',
-	redirectUri = 'http://localhost:3000/callback';
-
-
+var clientId = spotifyConfig.CLIENT_ID,
+	clientSecret = spotifyConfig.CLIENT_SECRET,
+	redirectUri = spotifyConfig.REDIRECT_URI;
 //ROUTES
-//Landing page for app
+
+ /** 
+ * Landing page for app
+ */
 app.get("/", function( req, res){
    res.render("landing"); 
 });
 
-//redirect user to spotify for AuthN
+/**
+ * Redirect user to spotify for AuthN
+ */
 app.get('/login', function(req, res) {
 	var spotifyApi = new spotAPI({
 		clientId: clientId,
@@ -46,7 +50,6 @@ app.get('/login', function(req, res) {
 
 /**
  * AuthN return from Spotify
- * 
  */
 app.get("/callback", function( req, res){
 	var spotifyApi = new spotAPI({
@@ -71,10 +74,8 @@ app.get("/callback", function( req, res){
       	json: true
     };
 
-
     //Redeem Code for Token AuthZ-ish
 	request.post(authOptions, function(error, response, body) {
-
 		console.log("Redeemed code for token: "+ body.access_token);
 
 		//Set cookie with access token
@@ -84,18 +85,23 @@ app.get("/callback", function( req, res){
 		//Redirect to /playlistCreator
 		res.redirect("./playlistCreator");
 
+		//TODO: add error handling
+
 	});
 
 
 });
 
-//Render playlist creation page
+/**
+ * Render playlist creation page
+ */
 app.get("/playlistCreator", function (req, res){
-	res.render("playlistCreator", {accessToken: req.query.accessToken});
+	res.render("playlistCreator");
 });
 
-
-//Get recommendations from the spotify API
+/**
+ * Get recommendations from the spotify API
+ */
 app.get("/recommendations", function (req, res){
 	var spotifyApi = new spotAPI({
 		clientId: clientId,
@@ -112,7 +118,7 @@ app.get("/recommendations", function (req, res){
 	spotifyApi.getRecommendations(searchOptions)
 		.then(function(results) {
 			res.json(results);
-			console.log(results);
+			console.log("Recommendations collected and returned");
 		});	
 });
 
@@ -131,7 +137,7 @@ app.get("/genres", function (req, res){
 	spotifyApi.getAvailableGenreSeeds()
 		.then(function(results) {
 			res.json(results);
-			console.log(results);
+			console.log("Genres collected");
 		});	
 });
 
@@ -148,13 +154,52 @@ app.get("/userInfo", function (req, res){
 
 	spotifyApi.getMe()
 		.then(function(results) {
+			res.cookie('userID', results.body.id);
 			res.json(results);
-			console.log(results);
+			console.log("User info collected for "+results.body.id);
 		});	
 });
 
+/**
+ * Post created playlist to spotify
+ */
 app.post("/createPlaylist", function (req, res){
-	
+	var spotifyApi = new spotAPI({
+		clientId: clientId,
+		clientSecret: clientSecret,
+		redirectUri: redirectUri,
+		accessToken: req.cookies.access_token
+	  });
+
+	var userID = req.cookies.userID;
+	var tracks = JSON.parse(req.body.selectedTracks);
+
+	  
+	// Create playlist
+	spotifyApi.createPlaylist(
+		userID, 
+		req.body.playlistName, 
+		{ public : false }
+	)
+	.then(function(results) {
+		console.log('Playlist created!');
+		console.log('user: '+ userID)
+		console.log('Playlist ID: '+results.body.id) 
+		console.log('Tracks: '+tracks)
+		
+		// Add tracks to the playlist
+		spotifyApi.addTracksToPlaylist(
+			userID, 
+			results.body.id, 
+			tracks
+		)
+		.catch(function(results) {
+			console.log(results); //TODO: actual error handling
+	  	});
+	})
+	.catch(function(results) {
+		console.log(results); //TODO: actual error handling
+	});
 });
 
 
