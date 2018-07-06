@@ -66,7 +66,7 @@ function getUserInfo(){
         data: {
         },
         success: function(result) {
-            $("#userName").text("Welcome, "+result.body.id);
+            $("#userName").text("Welcome, " + result.body.id);
         },
         failure: function(){
             alert("Unable to retrieve user info. Please refresh page and try again!"); // TODO: refresh access token as this is most likely the cause of error.
@@ -157,7 +157,7 @@ function populateResults(tracks){
         
         resultChild.className = "card";
         resultChild.id = tracks[index].uri;
-        resultChild.name = tracks[index].duration_ms;
+        resultChild.dataTrackTime = tracks[index].duration_ms;
         img.src = tracks[index].album.images["1"].url;
         img.className = "card-img-top";
         second.className = "card-body";
@@ -183,25 +183,32 @@ function populateResults(tracks){
         if(this.className != "card"){
             playlist.push(this.id);
             console.log("adding " + this.id);
-            playlistDuration += this.name;
-            console.log("Here!" + convertMillisToTime(playlistDuration));
+            playlistDuration += this.dataTrackTime;
+            console.log(convertMillisToTime(playlistDuration));
         }else{
             var index = playlist.indexOf(this.id);
             if(index > -1){
                 playlist.splice(index,1);
-                playlistDuration -= this.name;
+                playlistDuration -= this.dataTrackTime;
                 console.log("removing " + this.id);
                 console.log(convertMillisToTime(playlistDuration));
             }
         }
         console.log("Current playlist: " + playlist);
+        // getPlaylistDuration()
+        updatePlaylistDuration();
     });
 };
+//the below function inserts time into html without jquery but needs to uncommented on line 198 to work
+// function getPlaylistDuration(){
+//     document.getElementById("playlistDuration").innerHTML = convertMillisToTime(playlistDuration);
+//     console.log("here!!!!")
+// };
 
-function getPlaylistDuration(){
-    document.getElementById("playlistDuration").innerHTML = convertMillsToTime(playlistDuration);
-    console.log("here!!!!")
+function updatePlaylistDuration(){
+    var total = convertMillisToTime(playlistDuration);
+    $("#playlistDuration").text("  Total Playtime: "+total);
+    console.log("Playlist Total updated to: "+total);
 };
-
 
 
