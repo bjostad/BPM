@@ -2,6 +2,7 @@ console.log("Connected and working");
 var playlist = [];
 var playlistDuration = 0;
 
+
 function convertMillisToTime(time){
     let delim = " ";
     let hours = Math.floor(time / (1000 * 60 * 60) % 60);
@@ -22,6 +23,7 @@ function convertMillisToTime(time){
     }
 }
 
+
 $(document).ready(function() {
     getGenres();
     getUserInfo();
@@ -34,6 +36,7 @@ $(document).ready(function() {
         postSelectedTracks(playlist);
     });
 });
+
 
 /**
  * Get avialble genres from spotify
@@ -52,8 +55,8 @@ function getGenres(){
             alert("Unable to retrieve genres. Please refresh page and try again!"); // TODO: refresh access token as this is most likely the cause of error.
         }
     });
-
 };
+
 
 /**
  * Get username and display welcome message
@@ -148,7 +151,7 @@ function populateResults(tracks){
     
     $("#resultParent").empty();
 
-    
+
     for(index in tracks) {
         var resultParent = document.getElementById("resultParent");
         var resultChild = document.createElement("div");
@@ -173,7 +176,6 @@ function populateResults(tracks){
         console.log(time);
         text.appendChild(document.createTextNode("Track Length: " + time));
         resultParent.appendChild(resultChild);
-
     }
 
     //create playlist array from selected cards
@@ -181,17 +183,19 @@ function populateResults(tracks){
         console.log("card clicked!");
         $(this).toggleClass('selectedTrack');
         if(this.className != "card"){
-            playlist.push(this.dataset.trackUri);
-            console.log("adding " + this.dataset.trackUri);
-            playlistDuration += this.dataset.trackTime;
+            playlist.push($(this).data('trackUri'));
+            console.log("adding " + $(this).data('trackUri'));
+            playlistDuration += $(this).data('trackTime');
             console.log(convertMillisToTime(playlistDuration));
+            console.log("Adding track time: "+convertMillisToTime($(this).data('trackTime')));
         }else{
-            var index = playlist.indexOf(this.dataset.trackUri);
+            var index = playlist.indexOf($(this).data('trackUri'));
             if(index > -1){
                 playlist.splice(index,1);
-                playlistDuration -= this.dataset.trackTime;
-                console.log("removing " + this.dataset.trackUri);
+                playlistDuration -= $(this).data('trackTime');
+                console.log("removing " + $(this).data('trackUri'));
                 console.log(convertMillisToTime(playlistDuration));
+                console.log("removing track time: "+convertMillisToTime($(this).data('trackTime')));
             }
         }
         console.log("Current playlist: " + playlist);
