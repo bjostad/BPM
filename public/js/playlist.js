@@ -133,6 +133,7 @@ function postSelectedTracks(tracks){
             playlistName: $("#playlistName").val()
         },
         success: function(result) {
+            console.log("all good");
         },
         failure: function(){
             alert("Unable to post playlist."); // TODO: Handle error properly
