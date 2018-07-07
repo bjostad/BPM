@@ -25,6 +25,8 @@ function convertMillisToTime(time){
 $(document).ready(function() {
     getGenres();
     getUserInfo();
+    showBtns();
+
 
     //Setup event listener for Seach button
     $("#btnSearch").click(getRecommendations);
@@ -186,6 +188,8 @@ function populateResults(tracks){
             console.log("adding " + this.id);
             playlistDuration += this.dataTrackTime;
             console.log(convertMillisToTime(playlistDuration));
+            showBtns();
+            updatePlaylistDuration();
         }else{
             var index = playlist.indexOf(this.id);
             if(index > -1){
@@ -193,11 +197,12 @@ function populateResults(tracks){
                 playlistDuration -= this.dataTrackTime;
                 console.log("removing " + this.id);
                 console.log(convertMillisToTime(playlistDuration));
+                showBtns();
             }
         }
         console.log("Current playlist: " + playlist);
         // getPlaylistDuration()
-        updatePlaylistDuration();
+        // updatePlaylistDuration();
     });
 };
 //the below function inserts time into html without jquery but needs to uncommented on line 198 to work
@@ -208,8 +213,19 @@ function populateResults(tracks){
 
 function updatePlaylistDuration(){
     var total = convertMillisToTime(playlistDuration);
-    $("#playlistDuration").text("  Total Playtime: "+total);
-    console.log("Playlist Total updated to: "+total);
+    $("#playlistDuration").text("Total Playtime: " + total);
+    console.log("Playlist Total updated to: " + total);
 };
+
+function showBtns(){
+    if(playlistDuration !== 0){
+        $("#btnCreatePlaylist").show();
+        $("#playlistDuration").show();
+    }else{
+        $("#btnCreatePlaylist").hide();
+        $("#playlistDuration").hide();
+    }
+};
+
 
 
