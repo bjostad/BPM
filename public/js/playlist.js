@@ -2,28 +2,6 @@ console.log("Connected and working");
 var playlist = [];
 var playlistDuration = 0;
 
-
-function convertMillisToTime(time){
-    let delim = " ";
-    let hours = Math.floor(time / (1000 * 60 * 60) % 60);
-    let minutes = Math.floor(time / (1000 * 60) % 60);
-    let seconds = Math.floor(time / 1000 % 60);
-
-    hours = hours < 10 ? '0' + hours : hours;
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    seconds = seconds < 10 ? '0' + seconds : seconds;
-    if(hours === "00"){
-        return minutes + 'm' + delim + seconds + 's';
-    }
-    if (hours === "00" && minutes === "00"){
-        return seconds + 's';
-    }
-    else {
-        return hours + 'h'+ delim + minutes + 'm' + delim + seconds + 's';
-    }
-}
-
-
 $(document).ready(function() {
     getGenres();
     getUserInfo();
@@ -219,11 +197,30 @@ function showBtns(){
     if(playlistDuration !== 0){
         $("#btnCreatePlaylist").show();
         $("#playlistDuration").show();
+        $("#btnNewSearch").show();
     }else{
         $("#btnCreatePlaylist").hide();
         $("#playlistDuration").hide();
+        $("#btnNewSearch").hide();
     }
 };
 
+function convertMillisToTime(time){
+    let delim = " ";
+    let hours = Math.floor(time / (1000 * 60 * 60) % 60);
+    let minutes = Math.floor(time / (1000 * 60) % 60);
+    let seconds = Math.floor(time / 1000 % 60);
 
-
+    hours = hours < 10 ? '0' + hours : hours;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    if(hours === "00"){
+        return minutes + 'm' + delim + seconds + 's';
+    }
+    if (hours === "00" && minutes === "00"){
+        return seconds + 's';
+    }
+    else {
+        return hours + 'h'+ delim + minutes + 'm' + delim + seconds + 's';
+    }
+}
