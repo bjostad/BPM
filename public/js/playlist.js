@@ -2,26 +2,6 @@ console.log("Connected and working");
 var playlist = [];
 var playlistDuration = 0;
 
-function convertMillisToTime(time){
-    let delim = " ";
-    let hours = Math.floor(time / (1000 * 60 * 60) % 60);
-    let minutes = Math.floor(time / (1000 * 60) % 60);
-    let seconds = Math.floor(time / 1000 % 60);
-
-    hours = hours < 10 ? '0' + hours : hours;
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    seconds = seconds < 10 ? '0' + seconds : seconds;
-    if(hours === "00"){
-        return minutes + 'm' + delim + seconds + 's';
-    }
-    if (hours === "00" && minutes === "00"){
-        return seconds + 's';
-    }
-    else {
-        return hours + 'h'+ delim + minutes + 'm' + delim + seconds + 's';
-    }
-}
-
 $(document).ready(function() {
     getGenres();
     getUserInfo();
@@ -36,6 +16,7 @@ $(document).ready(function() {
         postSelectedTracks(playlist);
     });
 });
+
 
 /**
  * Get avialble genres from spotify
@@ -54,8 +35,8 @@ function getGenres(){
             alert("Unable to retrieve genres. Please refresh page and try again!"); // TODO: refresh access token as this is most likely the cause of error.
         }
     });
-
 };
+
 
 /**
  * Get username and display welcome message
@@ -151,6 +132,7 @@ function populateResults(tracks){
     
     $("#resultParent").empty();
 
+
     for(index in tracks) {
         var resultParent = document.getElementById("resultParent");
         var resultChild = document.createElement("div");
@@ -160,8 +142,8 @@ function populateResults(tracks){
         var br = document.createElement("br");
         
         resultChild.className = "card";
-        resultChild.id = tracks[index].uri;
-        resultChild.dataTrackTime = tracks[index].duration_ms;
+        resultChild.dataset.trackUri = tracks[index].uri;
+        resultChild.dataset.trackTime = tracks[index].duration_ms;
         img.src = tracks[index].album.images["1"].url;
         img.className = "card-img-top";
         second.className = "card-body";
@@ -174,29 +156,26 @@ function populateResults(tracks){
         var time = convertMillisToTime(tracks[index].duration_ms);
         console.log(time);
         text.appendChild(document.createTextNode("Track Length: " + time));
-        
         resultParent.appendChild(resultChild);
-
     }
 
     //create playlist array from selected cards
-    
     $(".card").on('click', function () {
         console.log("card clicked!");
         $(this).toggleClass('selectedTrack');
         if(this.className != "card"){
-            playlist.push(this.id);
-            console.log("adding " + this.id);
-            playlistDuration += this.dataTrackTime;
+            playlist.push($(this).data('trackUri'));
+            console.log("adding " + $(this).data('trackUri'));
+            playlistDuration += $(this).data('trackTime');
             console.log(convertMillisToTime(playlistDuration));
             showBtns();
             updatePlaylistDuration();
         }else{
-            var index = playlist.indexOf(this.id);
+            var index = playlist.indexOf($(this).data('trackUri'));
             if(index > -1){
                 playlist.splice(index,1);
-                playlistDuration -= this.dataTrackTime;
-                console.log("removing " + this.id);
+                playlistDuration -= $(this).data('trackTime');
+                console.log("removing " + $(this).data('trackUri'));
                 console.log(convertMillisToTime(playlistDuration));
                 showBtns();
             }
@@ -206,11 +185,7 @@ function populateResults(tracks){
         // updatePlaylistDuration();
     });
 };
-//the below function inserts time into html without jquery but needs to uncommented on line 198 to work
-// function getPlaylistDuration(){
-//     document.getElementById("playlistDuration").innerHTML = convertMillisToTime(playlistDuration);
-//     console.log("here!!!!")
-// };
+
 
 function updatePlaylistDuration(){
     var total = convertMillisToTime(playlistDuration);
@@ -222,11 +197,30 @@ function showBtns(){
     if(playlistDuration !== 0){
         $("#btnCreatePlaylist").show();
         $("#playlistDuration").show();
+        $("#btnNewSearch").show();
     }else{
         $("#btnCreatePlaylist").hide();
         $("#playlistDuration").hide();
+        $("#btnNewSearch").hide();
     }
 };
 
+function convertMillisToTime(time){
+    let delim = " ";
+    let hours = Math.floor(time / (1000 * 60 * 60) % 60);
+    let minutes = Math.floor(time / (1000 * 60) % 60);
+    let seconds = Math.floor(time / 1000 % 60);
 
-
+    hours = hours < 10 ? '0' + hours : hours;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    if(hours === "00"){
+        return minutes + 'm' + delim + seconds + 's';
+    }
+    if (hours === "00" && minutes === "00"){
+        return seconds + 's';
+    }
+    else {
+        return hours + 'h'+ delim + minutes + 'm' + delim + seconds + 's';
+    }
+}

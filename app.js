@@ -17,6 +17,7 @@ app.set("view engine", "ejs");
 var clientId = spotifyConfig.CLIENT_ID,
 	clientSecret = spotifyConfig.CLIENT_SECRET,
 	redirectUri = spotifyConfig.REDIRECT_URI;
+
 //ROUTES
 
  /** 
@@ -109,12 +110,11 @@ app.get("/recommendations", function (req, res){
 		redirectUri: redirectUri,
 		accessToken: req.cookies.access_token
   	});
-
 	var searchOptions = {
 		target_tempo: req.query.bpmRequested,
-		seed_genres: req.query.genre
+		seed_genres: req.query.genre,
+		limit: 100
 	};
-
 	spotifyApi.getRecommendations(searchOptions)
 		.then(function(results) {
 			res.json(results);
@@ -220,5 +220,5 @@ function getSpotProperties(){
  * Server must run on port 3000 to for redirect UI (localhost:3000/callback)
  */
 app.listen(3000, function(){
-    console.log("BPM Server Started.");
+    console.log("Pacemakr running.");
 });

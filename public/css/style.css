@@ -56,12 +56,21 @@ div, body{
 }
 
 .navbar {
-  background-color: none;
 }
-.fixed-top {
-  padding: 50px;
+
+.container {
+  margin: 0 auto;
+  width: 80%;
+  align-content: right;
 }
-.playlistDuration {
+
+.card-container {
+  margin: 0 auto;
+  width: 80%;
+  align-content: right;
+}
+
+#playlistDuration {
   background: #83be00;
   color: black;
   margin: auto;
@@ -71,19 +80,18 @@ div, body{
   border-radius: 12px;
 }
 
-.container {
-  margin: 0 auto;
-  width: 80%;
-  align-content: right;
-}
+#btnCreatePlaylist {
 
-div.fixed {
-  margin: 0 auto;
-  width: 69%;
+} 
+
+#btnNewSearch {
+  margin: auto 25%;
+  width: 50%;
   position: fixed;
-  bottom: 10px;
+  bottom: 20px;
   z-index: 1;
 } 
+
 #createPlaylist{
   align-items: center;
 }
