@@ -69,5 +69,21 @@ div, body{
   height:auto;
   text-align: center;
   border-radius: 12px;
-  
+}
+
+.container {
+  margin: 0 auto;
+  width: 80%;
+  align-content: right;
+}
+
+div.fixed {
+  margin: 0 auto;
+  width: 69%;
+  position: fixed;
+  bottom: 10px;
+  z-index: 1;
+} 
+#createPlaylist{
+  align-items: center;
 }

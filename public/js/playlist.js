@@ -27,6 +27,8 @@ function convertMillisToTime(time){
 $(document).ready(function() {
     getGenres();
     getUserInfo();
+    showBtns();
+
 
     //Setup event listener for Seach button
     $("#btnSearch").click(getRecommendations);
@@ -134,6 +136,7 @@ function postSelectedTracks(tracks){
             playlistName: $("#playlistName").val()
         },
         success: function(result) {
+            console.log("all good");
         },
         failure: function(){
             alert("Unable to post playlist."); // TODO: Handle error properly
@@ -187,7 +190,8 @@ function populateResults(tracks){
             console.log("adding " + $(this).data('trackUri'));
             playlistDuration += $(this).data('trackTime');
             console.log(convertMillisToTime(playlistDuration));
-            console.log("Adding track time: "+convertMillisToTime($(this).data('trackTime')));
+            showBtns();
+            updatePlaylistDuration();
         }else{
             var index = playlist.indexOf($(this).data('trackUri'));
             if(index > -1){
@@ -195,17 +199,31 @@ function populateResults(tracks){
                 playlistDuration -= $(this).data('trackTime');
                 console.log("removing " + $(this).data('trackUri'));
                 console.log(convertMillisToTime(playlistDuration));
-                console.log("removing track time: "+convertMillisToTime($(this).data('trackTime')));
+                showBtns();
             }
         }
         console.log("Current playlist: " + playlist);
-        updatePlaylistDuration();
+        // getPlaylistDuration()
+        // updatePlaylistDuration();
     });
 };
 
 
 function updatePlaylistDuration(){
     var total = convertMillisToTime(playlistDuration);
-    $("#playlistDuration").text("  Total Playtime: "+total);
-    console.log("Playlist Total updated to: "+total);
+    $("#playlistDuration").text("Total Playtime: " + total);
+    console.log("Playlist Total updated to: " + total);
 };
+
+function showBtns(){
+    if(playlistDuration !== 0){
+        $("#btnCreatePlaylist").show();
+        $("#playlistDuration").show();
+    }else{
+        $("#btnCreatePlaylist").hide();
+        $("#playlistDuration").hide();
+    }
+};
+
+
+
