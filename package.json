@@ -17,8 +17,8 @@
     "cookie-parser": "^1.4.3",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
-    "request": "^2.85.0",
-    "spotify-web-api-node": "^3.1.1",
+    "request": "^2.88.0",
+    "spotify-web-api-node": "^4.0.0",
     "uniqid": "^4.1.1"
   }
 }
