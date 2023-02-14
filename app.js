@@ -16,6 +16,7 @@ app.set("view engine", "ejs");
 //Spotify BPM App config
 var clientId = spotifyConfig.CLIENT_ID,
 	clientSecret = spotifyConfig.CLIENT_SECRET,
+	appPort = spotifyConfig.PORT,
 	redirectUri = spotifyConfig.REDIRECT_URI;
 
 //ROUTES
@@ -217,8 +218,8 @@ function getSpotProperties(){
 
 /**
  * START EXPRESS SERVER
- * Server must run on port 3000 to for redirect UI (localhost:3000/callback)
+ * Configure ROOT_URL and PORT in spotifyConfig.js ex: ROOT_URL:PORT/callback)
  */
-app.listen(3000, function(){
+app.listen(appPort, function(){
     console.log("Pacemakr running.");
 });
