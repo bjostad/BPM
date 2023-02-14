@@ -217,8 +217,8 @@ function getSpotProperties(){
 
 /**
  * START EXPRESS SERVER
- * Server must run on port 3000 to for redirect UI (localhost:3000/callback)
+ * Server must run on port 3000 to for redirect UI (configure ROOT_URL and PORT in spotifyConfig.js ex: ROOT_URL:PORT/callback)
  */
-app.listen(3000, function(){
+app.listen(spotifyConfig.PORT, function(){
     console.log("Pacemakr running.");
 });
