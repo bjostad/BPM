@@ -220,6 +220,6 @@ function getSpotProperties(){
  * START EXPRESS SERVER
  * Configure ROOT_URL and PORT in spotifyConfig.js ex: ROOT_URL:PORT/callback)
  */
-app.listen(3000, function(){
+app.listen(appPort, function(){
     console.log("Pacemakr running.");
 });
