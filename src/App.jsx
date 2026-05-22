@@ -34,9 +34,7 @@ function App() {
     }
     try {
       const tracks = await getRecommendations(bpm, genres);
-      // Attach the target bpm to the track objects so we can color them correctly in the timeline
-      const tracksWithBpm = tracks.map(t => ({ ...t, bpm }));
-      setRecommendations(tracksWithBpm);
+      setRecommendations(tracks);
     } catch (err) {
       console.error(err);
       alert("Failed to fetch recommendations.");
@@ -45,6 +43,17 @@ function App() {
 
   const handleAddTrack = (track) => {
     setPlaylist([...playlist, track]);
+  };
+
+  const handleRemoveTrack = (indexToRemove) => {
+    setPlaylist(playlist.filter((_, i) => i !== indexToRemove));
+  };
+
+  const handleReorderTrack = (dragIndex, dropIndex) => {
+    const newPlaylist = [...playlist];
+    const [draggedItem] = newPlaylist.splice(dragIndex, 1);
+    newPlaylist.splice(dropIndex, 0, draggedItem);
+    setPlaylist(newPlaylist);
   };
 
   const handleSavePlaylist = async () => {
@@ -145,7 +154,11 @@ function App() {
       </div>
 
       {playlist.length > 0 && (
-        <TimelineBar playlist={playlist} />
+        <TimelineBar 
+          playlist={playlist} 
+          onRemoveTrack={handleRemoveTrack} 
+          onReorderTrack={handleReorderTrack}
+        />
       )}
     </>
   );

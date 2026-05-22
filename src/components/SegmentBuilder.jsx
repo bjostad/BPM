@@ -6,16 +6,35 @@ export default function SegmentBuilder({ onSearch, pinnedGenres, setPinnedGenres
   const [bpm, setBpm] = useState(120);
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   
   useEffect(() => {
     // Fetch available genres on mount
-    getAvailableGenres().then(setGenres).catch(console.error);
+    getAvailableGenres()
+      .then(fetchedGenres => {
+        if (Array.isArray(fetchedGenres)) {
+          setGenres(fetchedGenres);
+        } else {
+          setErrorMsg('Invalid genres response: ' + JSON.stringify(fetchedGenres));
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        setErrorMsg(err.message || 'Error fetching genres');
+      });
   }, []);
 
-  const handleSearch = () => {
+  const triggerSearch = (showWarning = true) => {
     const activeGenres = [...new Set([...pinnedGenres, selectedGenre])].filter(Boolean);
+    if (activeGenres.length === 0) {
+      if (showWarning) alert("Please select at least one genre.");
+      return;
+    }
     onSearch(bpm, activeGenres);
   };
+
+  const handleSearch = () => triggerSearch(true);
+  const handleSliderRelease = () => triggerSearch(false);
 
   const togglePin = (genre) => {
     if (!genre) return;
@@ -39,12 +58,15 @@ export default function SegmentBuilder({ onSearch, pinnedGenres, setPinnedGenres
           max="200" 
           value={bpm} 
           onChange={(e) => setBpm(Number(e.target.value))}
+          onMouseUp={handleSliderRelease}
+          onTouchEnd={handleSliderRelease}
           style={{ accentColor: 'var(--accent-color)' }}
         />
       </div>
 
       <div className="input-group">
         <label className="input-label">Select Genre</label>
+        {errorMsg && <div style={{ color: 'red', fontSize: '12px' }}>{errorMsg}</div>}
         <div style={{ display: 'flex', gap: 8 }}>
           <select 
             className="input-field" 

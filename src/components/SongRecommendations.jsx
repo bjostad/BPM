@@ -38,6 +38,7 @@ export default function SongRecommendations({ tracks, onAddTrack, playlistUris }
                 <div className="song-artist">{track.artists.map(a => a.name).join(', ')}</div>
               </div>
               <div className="song-meta">
+                <div className="song-bpm">{track.bpm} BPM</div>
                 <span>{formatDuration(track.duration_ms)}</span>
                 {isAdded ? (
                   <Check size={20} color="var(--accent-color)" />
