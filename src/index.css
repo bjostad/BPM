@@ -140,7 +140,7 @@ input, select, button {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 24px;
-  padding-bottom: 120px; /* Space for timeline */
+  padding-bottom: 160px; /* Space for timeline */
   width: 100%;
 }
 
@@ -199,7 +199,6 @@ input, select, button {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 90px;
   background: rgba(10, 14, 20, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -224,16 +223,23 @@ input, select, button {
 }
 
 .timeline-bar {
-  flex: 1;
+  flex: none;
+  height: 60px;
+  min-height: 60px;
+  max-height: 60px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 6px;
   display: flex;
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.02);
+  box-sizing: border-box;
 }
 
 .timeline-segment {
   height: 100%;
+  min-height: 100%;
+  max-height: 100%;
+  box-sizing: border-box;
   transition: width 0.3s ease, background-color 0.3s ease;
   position: relative;
   cursor: pointer;
@@ -241,7 +247,7 @@ input, select, button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 4px;
+  padding: 0;
 }
 
 .timeline-segment:first-child {

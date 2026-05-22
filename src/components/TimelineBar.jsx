@@ -83,8 +83,10 @@ export default function TimelineBar({ playlist, onRemoveTrack, onReorderTrack })
                     {formatDuration(sectionDurationToDisplay)}
                   </div>
                 )}
-                <span className="timeline-segment-bpm">{track.bpm}</span>
-                <span className="timeline-segment-time">{formatDuration(track.duration_ms)}</span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', height: '100%', overflow: 'hidden', padding: '0 8px' }}>
+                  <span className="timeline-segment-bpm">{track.bpm}</span>
+                  <span className="timeline-segment-time">{formatDuration(track.duration_ms)}</span>
+                </div>
 
                 <div className="timeline-tooltip">
                   <div className="tooltip-content">

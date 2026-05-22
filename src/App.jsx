@@ -8,7 +8,6 @@ import { Activity } from 'lucide-react';
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
-  const [pinnedGenres, setPinnedGenres] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
   const [playlist, setPlaylist] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
@@ -141,12 +140,10 @@ function App() {
 
         <div className="grid-layout">
           <div>
-            <SegmentBuilder
-              onSearch={handleSearch}
-              pinnedGenres={pinnedGenres}
-              setPinnedGenres={setPinnedGenres}
-              onError={showToast}
-            />
+              <SegmentBuilder
+                onSearch={handleSearch}
+                onError={showToast}
+              />
 
             {playlist.length > 0 && (
               <div className="glass-panel" style={{ marginTop: 24 }}>
