@@ -38,9 +38,6 @@ export default function TimelineBar({ playlist, onRemoveTrack, onReorderTrack })
     <div className="timeline-container">
       <div className="timeline-header">
         <span className="timeline-title">Playlist Timeline</span>
-        <span className="timeline-title" style={{ color: 'var(--text-primary)' }}>
-          {formatDuration(totalDuration)}
-        </span>
       </div>
       <div className="timeline-bar">
         {(() => {
@@ -119,6 +116,11 @@ export default function TimelineBar({ playlist, onRemoveTrack, onReorderTrack })
             );
           });
         })()}
+      </div>
+      <div className="timeline-footer" style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
+        <span style={{ color: 'var(--text-primary)', fontWeight: 'bold', fontSize: '1rem', background: 'rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: '16px' }}>
+          Total Time: {formatDuration(totalDuration)}
+        </span>
       </div>
     </div>
   );

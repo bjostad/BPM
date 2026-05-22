@@ -11,10 +11,12 @@ export const authenticate = async () => {
   return { authenticated: true };
 };
 
-export const getRecommendations = async (bpm, genres) => {
+export const getRecommendations = async (bpm, genres, searchTerms = {}) => {
   // Simulate network delay
   await new Promise(r => setTimeout(r, 800));
   
+  const { artist, album, song } = searchTerms;
+
   // Generate 20 mock tracks
   const mockTracks = Array.from({ length: 20 }).map((_, i) => {
     const id = Math.random().toString(36).substring(7);
@@ -30,14 +32,19 @@ export const getRecommendations = async (bpm, genres) => {
     ];
     const coverUrl = covers[Math.floor(Math.random() * covers.length)];
     
+    const trackName = song ? `${song} (Remix ${i + 1})` : `Mock Track ${Math.floor(Math.random() * 1000)}`;
+    const artistName = artist || `Mock Artist ${Math.floor(Math.random() * 100)}`;
+    const albumName = album || `Mock Album ${Math.floor(Math.random() * 100)}`;
+
     return {
       id: id,
       uri: `spotify:track:${id}`,
-      name: `Mock Track ${Math.floor(Math.random() * 1000)}`,
-      artists: [{ name: `Mock Artist ${Math.floor(Math.random() * 100)}` }],
+      name: trackName,
+      artists: [{ name: artistName }],
       duration_ms: duration,
       bpm: simulatedBpm,
       album: {
+        name: albumName,
         images: [
           { url: coverUrl },
           { url: coverUrl },
